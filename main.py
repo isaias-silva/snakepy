@@ -1,23 +1,23 @@
-#libs
+# libs
 
 import pygame
 from pygame.locals import *
 from gameData import GAME_DATA
 from util import colid, randomGrid
 
-#iniciando
+# iniciando
 pygame.init()
 pygame.font.init()
-#direções constantes
+# direções constantes
 LEFT = 1
 RIGHT = 2
 UP = 3
 DOWN = 4
-#direcao inicial
+# direcao inicial
 mydir = LEFT
 
 
-fonte=pygame.font.SysFont("Arial",24)
+fonte = pygame.font.SysFont("Arial", 24)
 
 
 screen = pygame.display.set_mode((600, 400))
@@ -37,12 +37,15 @@ clock = pygame.time.Clock()
 
 
 while True:
-    clock.tick(20)
-    txt=fonte.render(str(GAME_DATA["pontos"]),1,(0,255,0))
+    clock.tick(GAME_DATA["speed"])
+    txt = fonte.render("pontos: "+str(GAME_DATA["pontos"]), 1, (0, 255, 0))
+    txtB = fonte.render("speed: "+str(GAME_DATA["speed"]), 1, (0, 0, 255))
+    
+
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
-            return
+
         if event.type == KEYDOWN:
 
             if event.key == K_UP:
@@ -72,24 +75,26 @@ while True:
     if (colid(snake[0], applePosition) == True):
         snake.append((snake[-1][0]+10, snake[-1][1]))
         applePosition = randomGrid()
-     
-        GAME_DATA["pontos"]+=1
-   
+        GAME_DATA["speed"] += 1
+        GAME_DATA["pontos"] += 10
+
     if (colid(snake[0], (0, snake[0][1])) == True):
-        snake[0] = (580, snake[0][1])
-     
+        #snake[0] = (580, snake[0][1])
+        pygame.quit()
     if (colid(snake[0], (600, snake[0][1])) == True):
-        snake[0] = (10, snake[0][1])
-     
-    if (colid(snake[0], (snake[0][0],0)) == True):
-        snake[0] = (snake[0][0],380)
-      
-    if (colid(snake[0], (snake[0][0],400)) == True):
-        snake[0] = (snake[0][0],10)
-    
+        #snake[0] = (10, snake[0][1])
+        pygame.quit()
+    if (colid(snake[0], (snake[0][0], 0)) == True):
+        #snake[0] = (snake[0][0],380)
+        pygame.quit()
+    if (colid(snake[0], (snake[0][0], 400)) == True):
+        #snake[0] = (snake[0][0],10)
+        pygame.quit()
 
     for pos in snake:
         screen.blit(snakeSkin, pos)
         screen.blit(apple, applePosition)
-        screen.blit(txt,(0,0))
+        screen.blit(txt, (0, 0))
+        screen.blit(txtB, (0, 24))
+       
     pygame.display.update()
