@@ -40,7 +40,6 @@ while True:
     clock.tick(GAME_DATA["speed"])
     txt = fonte.render("pontos: "+str(GAME_DATA["pontos"]), 1, (0, 255, 0))
     txtB = fonte.render("speed: "+str(GAME_DATA["speed"]), 1, (0, 0, 255))
-    
 
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -60,15 +59,15 @@ while True:
             if event.key == K_RIGHT:
                 if (mydir != LEFT):
                     mydir = RIGHT
-
-    if mydir == UP:
-        snake[0] = (snake[0][0], snake[0][1]-10)
-    if mydir == DOWN:
-        snake[0] = (snake[0][0], snake[0][1]+10)
-    if mydir == RIGHT:
-        snake[0] = (snake[0][0]+10, snake[0][1])
-    if mydir == LEFT:
-        snake[0] = (snake[0][0]-10, snake[0][1])
+    if (GAME_DATA["gameOver"] == False):
+        if mydir == UP:
+            snake[0] = (snake[0][0], snake[0][1]-10)
+        if mydir == DOWN:
+            snake[0] = (snake[0][0], snake[0][1]+10)
+        if mydir == RIGHT:
+            snake[0] = (snake[0][0]+10, snake[0][1])
+        if mydir == LEFT:
+            snake[0] = (snake[0][0]-10, snake[0][1])
     for i in range(len(snake)-1, 0, -1):
         snake[i] = (snake[i-1][0], snake[i-1][1])
     screen.fill((0, 0, 0))
@@ -80,21 +79,31 @@ while True:
 
     if (colid(snake[0], (0, snake[0][1])) == True):
         #snake[0] = (580, snake[0][1])
-        pygame.quit()
+        snakeSkin.fill((255, 0, 0))
+        GAME_DATA["gameOver"] = True
+
     if (colid(snake[0], (600, snake[0][1])) == True):
         #snake[0] = (10, snake[0][1])
-        pygame.quit()
+        snakeSkin.fill((255, 0, 0))
+        GAME_DATA["gameOver"] = True
+
     if (colid(snake[0], (snake[0][0], 0)) == True):
         #snake[0] = (snake[0][0],380)
-        pygame.quit()
+        snakeSkin.fill((255, 0, 0))
+        GAME_DATA["gameOver"] = True
+
     if (colid(snake[0], (snake[0][0], 400)) == True):
         #snake[0] = (snake[0][0],10)
-        pygame.quit()
+        snakeSkin.fill((255, 0, 0))
+        GAME_DATA["gameOver"] = True
 
     for pos in snake:
-        screen.blit(snakeSkin, pos)
-        screen.blit(apple, applePosition)
-        screen.blit(txt, (0, 0))
-        screen.blit(txtB, (0, 24))
-       
+        if (GAME_DATA["gameOver"] == False):
+            screen.blit(snakeSkin, pos)
+            screen.blit(apple, applePosition)
+            screen.blit(txt, (0, 0))
+            screen.blit(txtB, (0, 24))
+        else:
+
+            screen.blit(fonte.render("GAME OVER", 1, (255, 0, 0)), (240, 200))
     pygame.display.update()
